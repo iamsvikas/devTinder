@@ -3,27 +3,18 @@
 const express = require('express');
 
 const app = express();
+const { adminAuth, userAuth } = require('./middleware/auth');
+app.use('/admin', adminAuth);
 
-app.get('/user', (req, res) => {
-  res.send('received users successfully!!');
+app.get('/admin/getAllData', (req, res) => {
+  res.send('All Data sent!');
 });
 
-app.post('/user', (req, res) => {
-  res.send('stored data successfully!');
+app.get('/user/getUser', userAuth, (req, res) => {
+  res.send('user data sent!');
 });
 
-app.delete('/user', (req, res) => {
-  res.send('deleted data successfully!');
-});
-
-app.put('/user', (req, res) => {
-  res.send('updated user successfully!');
-});
-
-app.patch('/user', (req, res) => {
-  res.send('user details updated!');
-});
-app.use('/test', (req, res) => {
-  res.send('hello! testing');
+app.post('/user/login', (req, res) => {
+  res.send('user login successfully!');
 });
 app.listen(5173);
