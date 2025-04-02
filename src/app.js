@@ -8,12 +8,6 @@ const User = require('./models/user');
 app.use(express.json());
 app.post('/signup', async (req, res) => {
   const user = new User(req.body);
-  // const user = new User({
-  //   firstName: 'Vikas',
-  //   lastName: 'Sharma',
-  //   emailId: 'vikas@sharma.com',
-  //   password: 'vikas@123',
-  // });
   try {
     await user.save();
     res.send('User added successfully!');
@@ -64,7 +58,10 @@ app.patch('/user', async (req, res) => {
   const data = req.body;
   console.log(data);
   try {
-    await User.findByIdAndUpdate({ _id: userId }, data);
+    await User.findByIdAndUpdate({ _id: userId }, data, {
+      returnDocument: 'after',
+      runValidators: true,
+    });
     res.send('User updated successfully');
   } catch (err) {
     res.status(400).send('something went wrong!');
