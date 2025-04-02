@@ -1,12 +1,12 @@
 /** @format */
 
-const express = require('express');
-const connectDB = require('./config/database');
+const express = require("express");
+const connectDB = require("./config/database");
 const app = express();
-const User = require('./models/user');
+const User = require("./models/user");
 
 app.use(express.json());
-app.post('/signup', async (req, res) => {
+app.post("/signup", async (req, res) => {
   const user = new User(req.body);
   // const user = new User({
   //   firstName: 'Vikas',
@@ -16,19 +16,33 @@ app.post('/signup', async (req, res) => {
   // });
   try {
     await user.save();
-    res.send('User added successfully!');
+    res.send("User added successfully!");
   } catch (err) {
-    res.status(400).send('Error saving the user!');
+    res.status(400).send("Error saving the user!");
   }
 });
+
+app.get("/feed", async (req, res) => {
+  try {
+    const users = await User.find();
+    if (users.length === 0) {
+      return res.status(404).send("No users found!");
+    } else {
+      res.send(users);
+    }
+  } catch (err) {
+    res.status(400).send("Error fetching users!");
+  }
+});
+
 connectDB()
   .then(() => {
-    console.log('Database connection established...');
+    console.log("Database connection established...");
     app.listen(5173, () => {
-      console.log('server is successfully listening on port 5173');
+      console.log("server is successfully listening on port 5173");
     });
   })
-  .catch((err) => console.log('Database connetion failed!'));
+  .catch((err) => console.log("Database connetion failed!"));
 
 /* 
 const mongoose = require('mongoose');
