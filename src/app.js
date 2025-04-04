@@ -7,6 +7,7 @@ const User = require("./models/user");
 const bcrypt = require("bcrypt");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+const { validateSignUpData } = require('./utils/validation');
 // const cors = require("cors");
 // const corsOptions = {
 //   origin: "http://localhost:5173", // Replace with your frontend URL
@@ -34,10 +35,14 @@ app.post("/signup", async (req, res) => {
   //   password: 'vikas@123',
   // });
   try {
+    validateSignUpData(req);
+    if (req.body.skills?.length > 10)
+      throw new Error('maximum 10 skills allowed!');
+    const user = new User(req.body);
     await user.save();
     res.send("User added successfully!");
   } catch (err) {
-    res.status(400).send("Error :" + err.message);
+    res.status(400).send('ERROR: ' + err.message);
   }
 });
 
@@ -124,6 +129,8 @@ app.delete("/user", async (req, res) => {
 app.patch("/user", async (req, res) => {
   const userId = req.body.userId;
   const data = req.body;
+  if (req.body.skills?.length > 10)
+    throw new Error('maximum 10 skills allowed!');
   console.log(data);
   try {
     await User.findByIdAndUpdate({ _id: userId }, data, {
