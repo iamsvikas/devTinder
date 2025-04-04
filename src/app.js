@@ -5,8 +5,18 @@ const connectDB = require("./config/database");
 const app = express();
 const User = require("./models/user");
 const bcrypt = require("bcrypt");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+// const cors = require("cors");
+// const corsOptions = {
+//   origin: "http://localhost:5173", // Replace with your frontend URL
+//   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+//   credentials: true, // Allow credentials (cookies) to be sent
+// };
 
 app.use(express.json());
+app.use(cookieParser());
+
 app.post("/signup", async (req, res) => {
   const { firstName, lastName, emailId, password } = req.body;
   const hashedPassword = await bcrypt.hash(password, 10);
@@ -42,9 +52,35 @@ app.post("/login", async (req, res) => {
     if (!isMatch) {
       return res.status(400).send("Invalid credentials!");
     }
+    const token = await jwt.sign({ userId: user._id }, "Dev@tinder1234", {
+      expiresIn: "1h",
+    });
+    res.cookie("token", token);
     return res.status(200).send("Login successful!");
   } catch (error) {
     return res.status(400).send(`Error during login: ${error.message}`);
+  }
+});
+
+app.get("/profile", async (req, res) => {
+  try {
+    const cookies = req.cookies;
+    // console.log(cookies);
+    const { token } = cookies;
+    // console.log(token);
+    if (!token) {
+      throw new Error("Unauthorized access!");
+    }
+    const decodedMessage = await jwt.verify(token, "Dev@tinder1234");
+    console.log(decodedMessage);
+    const { userId } = decodedMessage;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).send("User not found!");
+    }
+    res.send(user);
+  } catch (error) {
+    return res.status(400).send(`Error: ${error.message}`);
   }
 });
 
