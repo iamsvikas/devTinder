@@ -1,9 +1,7 @@
-/** @format */
-
-const mongoose = require('mongoose');
-const validator = require('validator');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const mongoose = require("mongoose");
+const validator = require("validator");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
 
 const userSchema = mongoose.Schema(
   {
@@ -17,7 +15,7 @@ const userSchema = mongoose.Schema(
       trim: true,
       validate(value) {
         if (!validator.isEmail(value)) {
-          throw new Error('Email is not valid!');
+          throw new Error("Email is not valid!");
         }
       },
     },
@@ -33,20 +31,24 @@ const userSchema = mongoose.Schema(
     age: { type: Number, min: 18 },
     gender: {
       type: String,
-      validate(value) {
-        if (!['male', 'female', 'others'].includes(value)) {
-          throw new Error('Selected Gender is not valid!');
-        }
+      enum: {
+        values: ["male", "female", "others"],
+        message: "{VALUE} is not supported!",
       },
+      // validate(value) {
+      //   if (!['male', 'female', 'others'].includes(value)) {
+      //     throw new Error('Selected Gender is not valid!');
+      //   }
+      // },
     },
     photoUrl: {
       type: String,
       trim: true,
       default:
-        'https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg?w=740',
+        "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg?w=740",
       validate(value) {
         if (!validator.isURL(value)) {
-          throw new Error('URL is not valid!');
+          throw new Error("URL is not valid!");
         }
       },
     },
@@ -57,8 +59,8 @@ const userSchema = mongoose.Schema(
 
 userSchema.methods.getJWT = async function () {
   const user = this;
-  const token = jwt.sign({ userId: user._id }, 'Dev@tinder1234', {
-    expiresIn: '1d',
+  const token = jwt.sign({ userId: user._id }, "Dev@tinder1234", {
+    expiresIn: "1d",
   });
   return token;
 };
@@ -73,6 +75,6 @@ userSchema.methods.validatePassword = async function (passwordInputByUser) {
   return isPasswordValid;
 };
 
-const UserModel = mongoose.model('User', userSchema);
+const UserModel = mongoose.model("User", userSchema);
 
 module.exports = UserModel;

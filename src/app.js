@@ -1,33 +1,34 @@
-/** @format */
-
-const express = require('express');
-const connectDB = require('./config/database');
+const express = require("express");
+const connectDB = require("./config/database");
 const app = express();
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 
-const authRouter = require('./routes/auth');
-const profileRouter = require('./routes/profile');
-const requestRouter = require('./routes/request');
+const cors = require("cors");
+const authRouter = require("./routes/auth");
+const requestRouter = require("./routes/request");
+const profileRouter = require("./routes/profile");
+const userRouter = require("./routes/user");
 // const cors = require("cors");
 // const corsOptions = {
 //   origin: "http://localhost:5173", // Replace with your frontend URL
 //   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
 //   credentials: true, // Allow credentials (cookies) to be sent
 // };
-
+app.use(cors({ origin: "http://localhost:5173", credentials: true })); //whitelisting of the frontend url to enable storing of cookies in the browser
 app.use(express.json());
 app.use(cookieParser());
-app.use('/', authRouter);
-app.use('/', profileRouter);
-app.use('/', requestRouter);
+app.use("/", authRouter);
+app.use("/", requestRouter);
+app.use("/", profileRouter);
+app.use("/", userRouter);
 connectDB()
   .then(() => {
-    console.log('Database connection established...');
-    app.listen(5173, () => {
-      console.log('server is successfully listening on port 5173');
+    console.log("Database connection established...");
+    app.listen(7777, () => {
+      console.log("server is successfully listening on port 7777");
     });
   })
-  .catch((err) => console.log('Database connetion failed!'));
+  .catch((err) => console.log("Database connetion failed!"));
 
 // app.get('/user', async (req, res) => {
 //   try {
