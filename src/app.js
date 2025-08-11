@@ -14,26 +14,21 @@ const userRouter = require("./routes/user");
 //   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
 //   credentials: true, // Allow credentials (cookies) to be sent
 // };
-const allowedOrigins = [
-  "http://localhost:5173", // dev local
-  "https://betterthantherest.living", // production
-];
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      if (!origin) return callback(null, true); // allow non-browser requests like Postman
-      if (allowedOrigins.indexOf(origin) === -1) {
-        return callback(
-          new Error("CORS policy does not allow this origin"),
-          false
-        );
-      }
-      return callback(null, true);
-    },
-    credentials: true,
-  })
-);
-// app.use(cors({ origin: "http://localhost:5173", credentials: true })); //whitelisting of the frontend url to enable storing of cookies in the browser
+// const allowedOrigins = [
+//   "http://localhost:5173", // dev local
+//   "https://betterthantherest.living", // production
+// ];
+// app.use(cors({
+//   origin: function(origin, callback) {
+//     if (!origin) return callback(null, true); // allow non-browser requests like Postman
+//     if (allowedOrigins.indexOf(origin) === -1) {
+//       return callback(new Error("CORS policy does not allow this origin"), false);
+//     }
+//     return callback(null, true);
+//   },
+//   credentials: true,
+// }));
+app.use(cors({ origin: "http://localhost:5173", credentials: true })); //whitelisting of the frontend url to enable storing of cookies in the browser
 app.use(express.json());
 app.use(cookieParser());
 app.use("/", authRouter);
