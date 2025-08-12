@@ -3,7 +3,7 @@ const { userAuth } = require("../middleware/auth");
 const requestRouter = express.Router();
 const connectionRequestModel = require("../models/connectionRequest");
 const User = require("../models/user");
-
+const sendEmail = require("../utils/sendEmail");
 requestRouter.post(
   "/request/send/:status/:toUserId",
   userAuth,
@@ -38,6 +38,10 @@ requestRouter.post(
         status,
       });
       const data = await connectionRequest.save();
+
+      const emailRes = await sendEmail.run();
+      console.log(emailRes);
+
       res.json({
         message: `${req.user.firstName} has ${
           status === "interested" ? "shown interest in" : "ignored"
