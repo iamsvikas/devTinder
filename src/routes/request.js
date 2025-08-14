@@ -38,10 +38,14 @@ requestRouter.post(
         status,
       });
       const data = await connectionRequest.save();
-
-      const emailRes = await sendEmail.run();
-      console.log(emailRes);
-
+      if (status === "interested") {
+        const emailRes = await sendEmail.run(
+          `You've got a new connection request from ${req.user.firstName}`,
+          `<h1>${req.user.firstName} has ${
+            status === "interested" ? "shown interest in" : "ignored"
+          } ${toUser.firstName}</h1>`
+        );
+      }
       res.json({
         message: `${req.user.firstName} has ${
           status === "interested" ? "shown interest in" : "ignored"

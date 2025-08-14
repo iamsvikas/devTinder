@@ -8,7 +8,7 @@ const authRouter = require("./routes/auth");
 const requestRouter = require("./routes/request");
 const profileRouter = require("./routes/profile");
 const userRouter = require("./routes/user");
-// const cors = require("cors");
+
 // const corsOptions = {
 //   origin: "http://localhost:5173", // Replace with your frontend URL
 //   methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
