@@ -35,11 +35,19 @@ const userSchema = mongoose.Schema(
         values: ["male", "female", "others"],
         message: "{VALUE} is not supported!",
       },
+
       // validate(value) {
       //   if (!['male', 'female', 'others'].includes(value)) {
       //     throw new Error('Selected Gender is not valid!');
       //   }
       // },
+    },
+    isPremium: {
+      type: Boolean,
+      default: false,
+    },
+    membershipType: {
+      type: String,
     },
     photoUrl: {
       type: String,

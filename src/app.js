@@ -4,12 +4,13 @@ const app = express();
 const cookieParser = require("cookie-parser");
 
 require("dotenv").config();
-require("./utils/cronjobs");
+// require("./utils/cronjobs");
 const cors = require("cors");
 const authRouter = require("./routes/auth");
 const requestRouter = require("./routes/request");
 const profileRouter = require("./routes/profile");
 const userRouter = require("./routes/user");
+const paymentRouter = require("./routes/payment");
 
 // const corsOptions = {
 //   origin: "http://localhost:5173", // Replace with your frontend URL
@@ -42,6 +43,8 @@ app.use("/", authRouter);
 app.use("/", requestRouter);
 app.use("/", profileRouter);
 app.use("/", userRouter);
+app.use("/", paymentRouter);
+
 connectDB()
   .then(() => {
     console.log("Database connection established...");
