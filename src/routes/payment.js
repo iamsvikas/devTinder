@@ -81,7 +81,7 @@ paymentRouter.post("/payment/webook", async (req, res) => {
   }
 });
 
-paymentRouter.get("premium/verify", userAuth, async (req, res) => {
+paymentRouter.get("/premium/verify", userAuth, async (req, res) => {
   const user = req.user.toJSON();
   if (user.isPremuim) return res.json({ ...user });
   return res.json({ ...user });
