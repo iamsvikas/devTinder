@@ -44,7 +44,7 @@ paymentRouter.post("/payment/create", userAuth, async (req, res) => {
   }
 });
 
-paymentRouter.post("/payment/webook", async (req, res) => {
+paymentRouter.post("/payment/webhook", async (req, res) => {
   try {
     const webhookSignature = req.get("X-Razorpay-Signature");
 
@@ -56,7 +56,7 @@ paymentRouter.post("/payment/webook", async (req, res) => {
 
     if (!isWebhookValid)
       return res.status(400).json({ msg: "webhook signature is invalid!" });
-    console.log(000, req);
+    console.log(1111, req.body);
     // update payment in the db
     const paymentDetails = req.body.payload.payment.entity;
     const payment = await Payment.findOne({ orderId: paymentDetails.order_id });
@@ -79,13 +79,13 @@ paymentRouter.post("/payment/webook", async (req, res) => {
 
     return res.status(200).json({ msg: "Webhook received successfully!" });
   } catch (err) {
-    //
+    return res.status(500).json({ msg: "Internal server error" });
   }
 });
 
 paymentRouter.get("/premium/verify", userAuth, async (req, res) => {
   const user = req.user.toJSON();
-  if (user.isPremuim) return res.json({ ...user });
+  // if (user.isPremuim) return res.json({ ...user });
   return res.json({ ...user });
 });
 
