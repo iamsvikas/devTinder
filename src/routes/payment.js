@@ -56,7 +56,7 @@ paymentRouter.post("/payment/webook", async (req, res) => {
 
     if (!isWebhookValid)
       return res.status(400).json({ msg: "webhook signature is invalid!" });
-
+    console.log(000, req);
     // update payment in the db
     const paymentDetails = req.body.payload.payment.entity;
     const payment = await Payment.findOne({ orderId: paymentDetails.order_id });
@@ -71,8 +71,10 @@ paymentRouter.post("/payment/webook", async (req, res) => {
 
     // return success response to razorpay
     if (req.body.event === "payment.captured") {
+      console.log("captured");
     }
     if (req.body.event === "payment.failed") {
+      console.log("failed");
     }
 
     return res.status(200).json({ msg: "Webhook received successfully!" });
