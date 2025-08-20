@@ -70,7 +70,7 @@ paymentRouter.post("/payment/webhook", async (req, res) => {
     // return success response to razorpay
     console.log(req.body.event, typeof req.body.event);
 
-    if (req.body.event === "payment captured") {
+    if (req.body.event === "payment.captured") {
       // if (["payment.captured", "order.paid"].includes(req.body.event)) {
       const user = await User.findOne({ _id: payment.userId });
       console.log(4455, user);
